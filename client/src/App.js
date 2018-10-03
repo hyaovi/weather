@@ -5,9 +5,9 @@ import DateDisplayer from './component/dateDisplayer';
 import axios from 'axios';
 import './App.css';
 
+const key = process.env.key;
 
-
-const APPID = 'APPID=***************************';
+const APPID = `APPID=${key}`;
 const PATH_BASE = 'http://api.openweathermap.org/data/2.5';
 const WEATHER_TYPE_REQUEST = '/weather?';
 const CITY = 'q=';
