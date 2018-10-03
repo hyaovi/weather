@@ -1,0 +1,29 @@
+.container{
+    margin-top: 1.25rem;
+}
+.icon-weather{
+    height: 2.5rem;
+    width: auto;
+}
+.description-title{
+    font-size: .875rem;
+    margin: .375rem auto;
+    display: none;
+}
+.temperature{
+    font-size: 3.5rem;
+    margin: 1rem auto 1rem auto;
+    font-weight: 300;
+}
+.description-main{
+    color: #92c7d3;
+}
+.extra-info{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+.extra-info p {
+    margin-right: 2.825rem;
+    font-weight: 300;
+}
