@@ -1,67 +1,22 @@
 .frame{
-  height: 90vh;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: #5B6C74;
+  flex-flow: column wrap;
+  margin-top: 2.825rem;
+  color: #fff;
+  text-align: center !important;
+  
 }
-
-
+.shadow{
+  -moz-box-shadow: 0px 46px 99px 0px rgba(255, 255, 255, 0.13);
+  box-shadow: 0px 46px 99px 0px rgba(0,0,0,0.13);
+} 
 .App {
-  text-align: center;
-  width: 90%;
-  background-color: #fff;
-  min-height: 60vh;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1.875rem 4.5rem;
-  border: 6px solid #B195F1;
-  border-radius: 36px;  
-  -moz-box-shadow: 0px 76px 99px 0px rgba(255, 255, 255, 0.23);
-  box-shadow: 0px 76px 99px 0px rgba(0,0,0,0.23);
-
-}
-form.search-bar{
-  float: left;
+  text-align: center !important;
+  width:auto;
   margin: auto;
-  box-sizing: border-box;
+  padding: 1rem;
 }
 
-form.search-bar input{
-  padding:0.75rem 1.825rem;
-  border-radius: 0.375rem;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border:  #5B6C74 0px solid;
-  border-right: none;
-  min-width: 300px;
-  background-color: #F2f4f7;
-  font-size: 16px;
-  color: #A5BBC5;
-  box-sizing: border-box;
-}
-form.search-bar button{
-  float: right;
-  cursor: pointer;
-  padding: 0.75rem .825rem;
-  border:  #5B6C74 0px solid;
-  border-left: none;
-  background-color:#F2f4f7;
-  font-size: 14px;  
-  border-radius: 0.375rem; 
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  box-sizing: border-box;
-}
-form.search-bar button img {
-  height: 16px;
-  width: auto;
-}
-form.search-bar::after {
-  content: "";
-  clear: both;
-  display: block;
-}
 header div{
   display: flex;
   justify-content: center;

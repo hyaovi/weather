@@ -1,14 +1,14 @@
-import {React,} from 'react';
+import React from 'react';
 import './searchBar.css';
 function SearchBar(props){
     const {fetchWeather, onChange,city} = props;
-    return( 
+    return(
       <div className='search' >
       <form className='search-bar' onSubmit={fetchWeather} >
         <input
           value={city}
           type='text'
-          placeholder='Search for a city weather'
+          placeholder='enter a city'
           autoComplete='on'
           onChange={onChange}
         />

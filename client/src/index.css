@@ -4,6 +4,7 @@ body {
   padding: 0;
   font-family: Roboto, sans-serif;
   background-color: #f2f4f7;
-  background: url('../src/assets/bg-img.png') no-repeat ;
+  background: url('../src/assets/bg-img-clouds.jpg') no-repeat;
+  background-size: auto;
   font-size: 16px;
 }
