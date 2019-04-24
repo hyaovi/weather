@@ -9,7 +9,7 @@ import "./App.css";
 const key = (process.env.key = "9828381f48a11303aca58c53706d2797");
 
 const APPID = `APPID=${key}`;
-const PATH_BASE = "http://api.openweathermap.org/data/2.5";
+const PATH_BASE = "https://api.openweathermap.org/data/2.5";
 const WEATHER_TYPE_REQUEST = ["/weather?", "/forecast?"];
 const CITY = "q=";
 const UNITS = "units=metric";
