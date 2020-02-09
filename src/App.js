@@ -1,26 +1,25 @@
-import React, { Component } from "react";
-import WeatherDisplayer from "./components/WeatherDisplayer";
-import DateDisplayer from "./components/dateDisplayer";
-import SearchBar from "./components/searchBar";
-import ForecastDisplayer from "./components/forecastDisplayer";
-import axios from "axios";
-import "./App.css";
+import React, { Component } from 'react';
+import WeatherDisplayer from './components/WeatherDisplayer';
+import DateDisplayer from './components/dateDisplayer';
+import SearchBar from './components/searchBar';
+import ForecastDisplayer from './components/forecastDisplayer';
+import axios from 'axios';
 
 const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
-
+console.log(key);
 const APPID = `APPID=${key}`;
-const PATH_BASE = "https://api.openweathermap.org/data/2.5";
-const WEATHER_TYPE_REQUEST = ["/weather?", "/forecast?"];
-const CITY = "q=";
-const UNITS = "units=metric";
-const MODE = "mode=json";
+const PATH_BASE = 'https://api.openweathermap.org/data/2.5';
+const WEATHER_TYPE_REQUEST = ['/weather?', '/forecast?'];
+const CITY = 'q=';
+const UNITS = 'units=metric';
+const MODE = 'mode=json';
 //const ICON_URL = 'http://openweathermap.org/img/w/';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      city: "",
+      city: '',
       weather: null,
       weatherforecast: null,
       error: null
@@ -34,19 +33,17 @@ class App extends Component {
   }
   fetchWeather(event) {
     axios(
-      `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${
-        this.state.city
-      }&${UNITS}&${MODE}&${APPID}`
+      `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${this.state.city}&${UNITS}&${MODE}&${APPID}`
     )
       .then(response => {
         this.setWeather(response.data);
       })
       .then(
         axios(
-          `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${
-            this.state.city
-          }&${UNITS}&${MODE}&${APPID}`
-        ).then(response => this.setState({ weatherforecast: response.data }))
+          `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${this.state.city}&${UNITS}&${MODE}&${APPID}`
+        )
+          .then(response => this.setState({ weatherforecast: response.data }))
+          .catch(error => this.setState({ error }))
       )
       .catch(error => this.setState({ error }));
     event.preventDefault();
@@ -63,18 +60,18 @@ class App extends Component {
         <div className="App">
           <header className="App-header">
             <DateDisplayer
-              city={weather ? weather.name : ""}
-              countryCode={weather ? weather.sys.country : ""}
+              city={weather ? weather.name : ''}
+              countryCode={weather ? weather.sys.country : ''}
             />
             <SearchBar
               fetchWeather={this.fetchWeather}
-              city={city || ""}
+              city={city || ''}
               onChange={this.onChange}
             />
           </header>
           {weather && weatherforecast ? (
             <WeatherDisplayer weather={weather} error={error}>
-              {" "}
+              {' '}
               <ForecastDisplayer weatherforecast={weatherforecast} />
             </WeatherDisplayer>
           ) : (
