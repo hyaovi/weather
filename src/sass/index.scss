@@ -1,45 +1,31 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #f2f4f7;
-  background: url('../assets/bg-img-clouds.jpg') no-repeat;
-  background-size: cover;
-  font-size: 16px;
-  min-height: 100vh;
-}
+@import './variables';
+@import './rootStyle';
+@import './weatherDisplayer';
+@import './forecast_weather';
+@import './locationDisplayer';
+@import './searchBar';
 
-// frame APP
-.frame {
+.app-container {
+  margin: 1rem;
   display: flex;
-  flex-flow: column wrap;
-  margin-top: 2.825rem;
-  color: #fff;
-  text-align: center !important;
+  flex-flow: column nowrap;
+  align-content: space-between;
 }
-.shadow {
-  -moz-box-shadow: 0px 46px 99px 0px rgba(255, 255, 255, 0.13);
-  box-shadow: 0px 46px 99px 0px rgba(0, 0, 0, 0.13);
-}
-.App {
-  text-align: center !important;
-  width: auto;
-  margin: auto;
-  padding: 1rem;
-}
-
-header div {
-  display: flex;
-  justify-content: center;
-}
-@media screen and (max-width: 768px) {
-  .App {
-    width: auto;
-    padding: 0;
+@media screen and (min-width: 768px) {
+  .app {
+    background-color: $white;
+    border-radius: 32px;
+    max-width: 370px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  .frame {
-    box-sizing: border-box;
-    margin-top: 0.825rem;
+  .app-container {
+    margin: 2rem;
+    align-content: space-between;
+    height: 775px;
+    .item {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
   }
 }

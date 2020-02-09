@@ -1,6 +1,6 @@
-import React from "react";
-import "./searchBar.css";
-import searchIcon from "../assets/icons-search.svg";
+import React from 'react';
+
+import searchIcon from '../assets/icons-search.svg';
 function SearchBar(props) {
   const { fetchWeather, onChange, city } = props;
   return (
