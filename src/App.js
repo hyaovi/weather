@@ -6,7 +6,7 @@ import ForecastDisplayer from "./components/forecastDisplayer";
 import axios from "axios";
 import "./App.css";
 
-const key = (process.env.key = "9828381f48a11303aca58c53706d2797");
+const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
 
 const APPID = `APPID=${key}`;
 const PATH_BASE = "https://api.openweathermap.org/data/2.5";
