@@ -20,3 +20,13 @@ body {
 .text-white {
   color: $white;
 }
+@media screen and (min-width: 768px) {
+  body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column nowrap;
+    min-height: 100vh;
+  }
+}

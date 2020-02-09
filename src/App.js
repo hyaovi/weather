@@ -3,7 +3,7 @@ import WeatherDisplayer from './components/WeatherDisplayer';
 import Location from './components/ LocationDisplayer';
 import ForecastDisplayer from './components/forecastDisplayer';
 import axios from 'axios';
-
+import Loader from './components/Loader';
 import { getCity, fetchData } from './utils';
 
 const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
@@ -34,7 +34,6 @@ class App extends Component {
     this.setState({ city: event.target.value });
   }
   loading(loadingState) {
-    console.log(loadingState);
     this.setState({ isLoading: loadingState });
   }
   fetchWeather(event) {
@@ -88,21 +87,21 @@ class App extends Component {
       <div className="app">
         <div className="app-container">
           {isLoading ? (
-            <p>Loading...</p>
+            <Loader />
           ) : (
             <>
-              <header className="item app-header">
+              <header className="container-item app-header">
                 <Location
                   city={weather ? weather.name : ''}
                   countryCode={weather ? weather.sys.country : ''}
                 />
               </header>
-              <div className="item">
+              <div className="container-item">
                 {weather && (
                   <WeatherDisplayer weather={weather} error={error} />
                 )}
               </div>
-              <div className="item">
+              <div className="container-item">
                 {weatherforecast && (
                   <ForecastDisplayer weatherforecast={weatherforecast} />
                 )}
