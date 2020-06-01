@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function dateConverter(dt) {
   const date = new Date(dt * 1000).toDateString();
@@ -11,14 +11,14 @@ function ForecastDisplayer({ weatherforecast }) {
   }
   return (
     <div className="daily">
-      {weatherDaily.map(item => {
+      {weatherDaily.slice(0, 4).map(item => {
         return (
-          <div key={item.dt.toLocaleString()}>
-            <p>
+          <div className="item" key={item.dt.toLocaleString()}>
+            <small className="">
               <strong>{dateConverter(item.dt)}</strong>
-            </p>
-            <p className="text-muted">{item.main.temp}&deg;C</p>
-            <p className="text-muted">{item.weather[0].description}</p>
+            </small>
+            <small className="">{item.main.temp}&deg;C</small>
+            <small className="">{item.weather[0].description}</small>
           </div>
         );
       })}

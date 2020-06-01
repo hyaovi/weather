@@ -1,0 +1,46 @@
+@import './variables';
+@import './rootStyle';
+@import './weatherDisplayer';
+@import './searchBar';
+@import './forecast_weather';
+@import './locationDisplayer';
+
+.app {
+  min-height: 100vh;
+}
+.app-container {
+  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-content: space-between;
+  min-height: 100vh;
+  .container-item {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+@media screen and (min-width: 769px) {
+  .app {
+    background-color: $white;
+    border-radius: 32px;
+    max-width: 420px;
+    min-height: 675px;
+    margin: auto;
+
+    padding: 0.8rem;
+    border: solid 1rem $light;
+    box-shadow: 0px 0px 1px $redish;
+  }
+  .app-container {
+    // margin: auto 1rem;
+    align-content: space-between;
+    min-height: 675px;
+    .container-item {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+}
+.loader {
+  margin: auto;
+}

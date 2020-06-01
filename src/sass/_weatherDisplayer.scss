@@ -1,0 +1,25 @@
+.actual-weather {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+  .temperature {
+    font-size: 64px;
+    margin-bottom: 0px;
+    margin-right: 1rem;
+    font-weight: 500 !important;
+  }
+}
+.actual-weather-block {
+  margin-bottom: 2rem;
+}
+.extra-description {
+  display: flex;
+  flex-flow: column nowrap;
+  max-width: 354px;
+  .item {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+}
