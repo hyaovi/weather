@@ -9,7 +9,6 @@ import {
 export const getCity = async () => {
   try {
     const ip = await (await axios.get(`${HEROKU_CORS_URL}/${IPIFY_URL}`)).data;
-    console.log(ip);
     return await axios.get(
       `${HEROKU_CORS_URL}/${IP_STACK_URL}${ip}${IP_STACK_PARAMS}`
     );
