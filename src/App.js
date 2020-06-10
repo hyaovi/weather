@@ -7,6 +7,7 @@ import Loader from './components/Loader';
 import { getCity, fetchData } from './utils';
 import { ReactComponent as RefreshIcon } from './assets/icon-refresh.svg';
 import { ReactComponent as InfoIcon } from './assets/github.svg';
+import SearchBar from './components/searchBar';
 const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
 
 const APPID = `APPID=${key}`;
@@ -109,6 +110,13 @@ class App extends Component {
                     </a>
                   </span>
                 </div>
+                <SearchBar
+                  fetchWeather={this.fetchWeather}
+                  city={this.state.city}
+                  onChange={this.onChange}
+                  style={{ width: '100%' }}
+                />
+
                 <Location
                   city={weather ? weather.name : ''}
                   countryCode={weather ? weather.sys.country : ''}
