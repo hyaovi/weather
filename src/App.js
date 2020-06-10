@@ -5,7 +5,9 @@ import ForecastDisplayer from './components/forecastDisplayer';
 import axios from 'axios';
 import Loader from './components/Loader';
 import { getCity, fetchData } from './utils';
-
+import { ReactComponent as RefreshIcon } from './assets/icon-refresh.svg';
+import { ReactComponent as InfoIcon } from './assets/github.svg';
+import SearchBar from './components/searchBar';
 const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
 
 const APPID = `APPID=${key}`;
@@ -23,7 +25,7 @@ class App extends Component {
       weather: null,
       weatherforecast: null,
       error: null,
-      isLoading: false
+      isLoading: false,
     };
     this.onChange = this.onChange.bind(this);
     this.fetchWeather = this.fetchWeather.bind(this);
@@ -41,17 +43,17 @@ class App extends Component {
     axios(
       `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${this.state.city}&${UNITS}&${MODE}&${APPID}`
     )
-      .then(response => {
+      .then((response) => {
         this.setWeather(response.data);
       })
       .then(
         axios(
           `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${this.state.city}&${UNITS}&${MODE}&${APPID}`
         )
-          .then(response => this.setState({ weatherforecast: response.data }))
-          .catch(error => this.setState({ error }))
+          .then((response) => this.setState({ weatherforecast: response.data }))
+          .catch((error) => this.setState({ error }))
       )
-      .catch(error => this.setState({ error }));
+      .catch((error) => this.setState({ error }));
     this.loading(false);
     event.preventDefault();
   }
@@ -84,24 +86,48 @@ class App extends Component {
     const { weather, weatherforecast, error, isLoading } = this.state;
 
     return (
-      <div className="app">
-        <div className="app-container">
+      <div className='app'>
+        <div className='app-container'>
           {isLoading ? (
             <Loader />
           ) : (
             <>
-              <header className="container-item app-header">
+              <header className='container-item app-header'>
+                <div className='actions'>
+                  <span className='action-icon'>
+                    <RefreshIcon
+                      classNAme='icon'
+                      onClick={() => window.location.reload()}
+                    />
+                  </span>
+                  <span className='action-icon'>
+                    <a
+                      href='https://github.com/hyaovi/weather'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      <InfoIcon classNAme='icon' />
+                    </a>
+                  </span>
+                </div>
+                <SearchBar
+                  fetchWeather={this.fetchWeather}
+                  city={this.state.city}
+                  onChange={this.onChange}
+                  style={{ width: '100%' }}
+                />
+
                 <Location
                   city={weather ? weather.name : ''}
                   countryCode={weather ? weather.sys.country : ''}
                 />
               </header>
-              <div className="container-item">
+              <div className='container-item'>
                 {weather && (
                   <WeatherDisplayer weather={weather} error={error} />
                 )}
               </div>
-              <div className="container-item">
+              <div className='container-item'>
                 {weatherforecast && (
                   <ForecastDisplayer weatherforecast={weatherforecast} />
                 )}
