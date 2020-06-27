@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
-import WeatherDisplayer from './components/WeatherDisplayer';
-import Location from './components/ LocationDisplayer';
-import ForecastDisplayer from './components/forecastDisplayer';
-import axios from 'axios';
-import Loader from './components/Loader';
+import React, { useEffect, useState } from 'react';
 import { getCity, fetchData } from './utils';
-import { ReactComponent as RefreshIcon } from './assets/icon-refresh.svg';
-import { ReactComponent as InfoIcon } from './assets/github.svg';
-import SearchBar from './components/searchBar';
-const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
+import WeatherDisplayer, {
+  HighlightsDisplayer,
+  ForecastDisplayer,
+} from './components/WeatherDisplayer';
 
+const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
 const APPID = `APPID=${key}`;
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5';
 const WEATHER_TYPE_REQUEST = ['/weather?', '/forecast?'];
@@ -17,127 +13,90 @@ const CITY = 'q=';
 const UNITS = 'units=metric';
 const MODE = 'mode=json';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      city: '',
-      weather: null,
-      weatherforecast: null,
-      error: null,
-      isLoading: false,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.fetchWeather = this.fetchWeather.bind(this);
-    this.setWeather = this.setWeather.bind(this);
-    this.loading = this.loading.bind(this);
-  }
-  onChange(event) {
-    this.setState({ city: event.target.value });
-  }
-  loading(loadingState) {
-    this.setState({ isLoading: loadingState });
-  }
-  fetchWeather(event) {
-    this.loading(true);
-    axios(
-      `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${this.state.city}&${UNITS}&${MODE}&${APPID}`
-    )
-      .then((response) => {
-        this.setWeather(response.data);
-      })
-      .then(
-        axios(
-          `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${this.state.city}&${UNITS}&${MODE}&${APPID}`
-        )
-          .then((response) => this.setState({ weatherforecast: response.data }))
-          .catch((error) => this.setState({ error }))
-      )
-      .catch((error) => this.setState({ error }));
-    this.loading(false);
-    event.preventDefault();
-  }
+function App() {
+  const [userInput, setuserInput] = useState('');
+  const [weatherData, setweatherData] = useState({
+    current: { err: false, data: undefined },
+    forecast: { err: false, data: undefined },
+  });
 
-  setWeather(weather) {
-    this.setState({ weather, error: false });
-  }
+  const WeatherFromCity = async (city) => {
+    const currentWeather = await fetchData(
+      `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${city}&${UNITS}&${MODE}&${APPID}`
+    );
 
-  componentDidMount() {
-    const getLocation = async () => {
-      this.loading(true);
-      const response = await getCity();
-      const cityName = response.data.city;
+    const forecastWeather = await fetchData(
+      `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${city}&${UNITS}&${MODE}&${APPID}`
+    );
 
-      const actualWeather = await fetchData(
-        `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${cityName}&${UNITS}&${MODE}&${APPID}`
+    setweatherData((PREVSTATE) => ({
+      ...PREVSTATE,
+      current: currentWeather,
+      forecast: forecastWeather,
+    }));
+    return { currentWeather, forecastWeather };
+  };
+  const SearchFromInput = (e) => {
+    e.preventDefault();
+    WeatherFromCity(userInput);
+  };
+  useEffect(() => {
+    const location = async () => {
+      const location = await getCity();
+      console.log(location.data.city);
+      const currentWeather = await fetchData(
+        `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${location.data.city}&${UNITS}&${MODE}&${APPID}`
       );
-      this.setWeather(actualWeather.data);
 
-      const forecastweather = await fetchData(
-        `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${cityName}&${UNITS}&${MODE}&${APPID}`
+      const forecastWeather = await fetchData(
+        `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${location.data.city}&${UNITS}&${MODE}&${APPID}`
       );
-      this.loading(false);
-      this.setState({ weatherforecast: forecastweather.data });
+      setweatherData((PREVSTATE) => ({
+        ...PREVSTATE,
+        current: currentWeather,
+        forecast: forecastWeather,
+      }));
     };
-
-    getLocation();
-  }
-  render() {
-    const { weather, weatherforecast, error, isLoading } = this.state;
-
-    return (
-      <div className='app'>
-        <div className='app-container'>
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <>
-              <header className='container-item app-header'>
-                <div className='actions'>
-                  <span className='action-icon'>
-                    <RefreshIcon
-                      classNAme='icon'
-                      onClick={() => window.location.reload()}
-                    />
-                  </span>
-                  <span className='action-icon'>
-                    <a
-                      href='https://github.com/hyaovi/weather'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      <InfoIcon classNAme='icon' />
-                    </a>
-                  </span>
-                </div>
-                <SearchBar
-                  fetchWeather={this.fetchWeather}
-                  city={this.state.city}
-                  onChange={this.onChange}
-                  style={{ width: '100%' }}
+    location();
+  }, []);
+  return (
+    <PageWrapper>
+      <div className="row  ">
+        <div className="col-md-4 col-xl-3 full-height bg-white px-md-4 px-xl-5">
+          <div className="py-5 h-100 d-flex flex-column  ">
+            <form onSubmit={SearchFromInput}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control input-custom"
+                  id="keyword"
+                  value={userInput}
+                  onChange={({ target: { value } }) => setuserInput(value)}
+                  aria-describedby="emailHelp"
+                  placeholder="Search for a town ..."
                 />
+              </div>
+            </form>
 
-                <Location
-                  city={weather ? weather.name : ''}
-                  countryCode={weather ? weather.sys.country : ''}
-                />
-              </header>
-              <div className='container-item'>
-                {weather && (
-                  <WeatherDisplayer weather={weather} error={error} />
-                )}
-              </div>
-              <div className='container-item'>
-                {weatherforecast && (
-                  <ForecastDisplayer weatherforecast={weatherforecast} />
-                )}
-              </div>
-            </>
-          )}
+            <WeatherDisplayer weather={weatherData.current} />
+          </div>
+        </div>
+
+        <div className="col-md-8 col-xl-9 full-height">
+          <div className="py-5 h-100">
+            <ForecastDisplayer forecast={weatherData.forecast} />
+            <HighlightsDisplayer weather={weatherData.current} />
+          </div>
         </div>
       </div>
-    );
-  }
+    </PageWrapper>
+  );
 }
 
 export default App;
+
+const PageWrapper = ({ children }) => (
+  <div className="bg-light page-wrapper">
+    <div className="container-fluid px-lg-5">{children}</div>
+  </div>
+);
