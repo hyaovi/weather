@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { getCity, fetchData } from './utils';
-import WeatherDisplayer, {
-  HighlightsDisplayer,
-  ForecastDisplayer,
-} from './components/WeatherDisplayer';
 
-const key = process.env.REACT_APP_OPEN_WEAHTER_KEY;
-const APPID = `APPID=${key}`;
-const PATH_BASE = 'https://api.openweathermap.org/data/2.5';
-const WEATHER_TYPE_REQUEST = ['/weather?', '/forecast?'];
-const CITY = 'q=';
-const UNITS = 'units=metric';
-const MODE = 'mode=json';
+import {
+  APPID,
+  UNITS,
+  PATH_BASE,
+  CITY,
+  MODE,
+  WEATHER_TYPE_REQUEST,
+} from './constants';
+
+import { getCity, fetchData } from './utils';
+
+import WeatherDisplayer from './components/WeatherDisplayer';
+import ForecastDisplayer from './components/ForecastDisplayer';
+import HighlightsDisplayer from './components/HighlightsDisplayer';
 
 function App() {
   const [userInput, setuserInput] = useState('');
@@ -20,42 +22,39 @@ function App() {
     forecast: { err: false, data: undefined },
   });
 
-  const WeatherFromCity = async (city) => {
+  const fetchWeather = async (city) => {
     const currentWeather = await fetchData(
-      `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${city}&${UNITS}&${MODE}&${APPID}`
+      `${PATH_BASE}${WEATHER_TYPE_REQUEST.CURRENT}${CITY}${city}&${UNITS}&${MODE}&${APPID}`
     );
-
     const forecastWeather = await fetchData(
-      `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${city}&${UNITS}&${MODE}&${APPID}`
+      `${PATH_BASE}${WEATHER_TYPE_REQUEST.FORECAST}${CITY}${city}&${UNITS}&${MODE}&${APPID}`
     );
+    return { currentWeather, forecastWeather };
+  };
 
+  const setData = ({ currentWeather, forecastWeather }) =>
     setweatherData((PREVSTATE) => ({
       ...PREVSTATE,
       current: currentWeather,
       forecast: forecastWeather,
     }));
-    return { currentWeather, forecastWeather };
+
+  const fetchAndSetWeather = async (city) => {
+    const { currentWeather, forecastWeather } = await fetchWeather(city);
+    setData({ currentWeather, forecastWeather });
   };
   const SearchFromInput = (e) => {
     e.preventDefault();
-    WeatherFromCity(userInput);
+    fetchAndSetWeather(userInput);
   };
   useEffect(() => {
     const location = async () => {
       const location = await getCity();
       console.log(location.data.city);
-      const currentWeather = await fetchData(
-        `${PATH_BASE}${WEATHER_TYPE_REQUEST[0]}${CITY}${location.data.city}&${UNITS}&${MODE}&${APPID}`
+      const { currentWeather, forecastWeather } = await fetchWeather(
+        location.data.city
       );
-
-      const forecastWeather = await fetchData(
-        `${PATH_BASE}${WEATHER_TYPE_REQUEST[1]}${CITY}${location.data.city}&${UNITS}&${MODE}&${APPID}`
-      );
-      setweatherData((PREVSTATE) => ({
-        ...PREVSTATE,
-        current: currentWeather,
-        forecast: forecastWeather,
-      }));
+      setData({ currentWeather, forecastWeather });
     };
     location();
   }, []);
@@ -64,19 +63,11 @@ function App() {
       <div className="row  ">
         <div className="col-md-4 col-xl-3 full-height bg-white px-md-4 px-xl-5">
           <div className="py-5 h-100 d-flex flex-column  ">
-            <form onSubmit={SearchFromInput}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control input-custom"
-                  id="keyword"
-                  value={userInput}
-                  onChange={({ target: { value } }) => setuserInput(value)}
-                  aria-describedby="emailHelp"
-                  placeholder="Search for a town ..."
-                />
-              </div>
-            </form>
+            <SearchBar
+              userInput={userInput}
+              setuserInput={setuserInput}
+              SearchFromInput={SearchFromInput}
+            />
 
             <WeatherDisplayer weather={weatherData.current} />
           </div>
@@ -100,3 +91,21 @@ const PageWrapper = ({ children }) => (
     <div className="container-fluid px-lg-5">{children}</div>
   </div>
 );
+
+const SearchBar = ({ SearchFromInput, userInput, setuserInput }) => {
+  return (
+    <form onSubmit={SearchFromInput}>
+      <div className="form-group">
+        <input
+          type="text"
+          className="form-control input-custom"
+          id="keyword"
+          value={userInput}
+          onChange={({ target: { value } }) => setuserInput(value)}
+          aria-describedby="emailHelp"
+          placeholder="Search for a town ..."
+        />
+      </div>
+    </form>
+  );
+};

@@ -38,8 +38,12 @@ input,
 .icon-container {
   border-radius: 50%;
   background-color: $primary;
+  margin-bottom: 0.825rem;
   max-height: 54px;
   max-width: 54px;
+  @media screen and (min-width: 767px) {
+    margin-bottom: auto;
+  }
   svg {
     margin: 1rem;
     height: 16px;
@@ -48,4 +52,8 @@ input,
 }
 .card {
   border-radius: 1.8em;
+}
+.x-scroll {
+  overflow: auto;
+  white-space: nowrap;
 }
